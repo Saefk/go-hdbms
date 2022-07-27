@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>
+    Select Query
+</h1>
+<form action ="/patient/name" method ="POST">
+    <label for ="patient">Patient First Name :</label><br>
+    <input type = "text" id ="patientID" name="firstName" value=""><br>
+    <label for ="patient">Patient Last Name :</label><br>
+    <input type = "text" id ="patientID" name="lastName" value=""><br>
+    <input type = "submit" value="Search">
+</form>
+
+{{if .}}
+    <ul>
+
+        {{range .}}
+        <br>
+        <li>Id : {{.ID}}</li>
+        <li>First Name : {{.Firstname}}</li>
+        <li>Last Name : {{.Lastname}}</li>
+        <li>Ward Name : {{.Ward}}</li>
+        <br>
+        <a href = "/patient/remove/?patientId={{.ID}}">Delete</a>
+        <a href = "/patient/update/redirect/?patientId={{.ID}}">Edit</a>
+        <br>
+        {{end}}
+    </ul>
+{{end}}
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>
+    Update Patient Details
+</h1>
+<form action ="/patient/update/details/?patientId={{.ID}}" method ="POST">
+    <label for ="patient">Patient First Name :</label><br>
+    <input type = "text" id ="firstNameID" name="firstName" value="{{.Firstname}}"><br>
+    <label for ="patient">Patient Last Name :</label><br>
+    <input type = "text" id ="lastNameID" name="lastName" value="{{.Lastname}}"><br>
+    <label for ="patient">Current Ward : {{.Ward}}</label><br>
+
+    <select name ="WardName" id="WardID" >
+        <option value = "Surgical">None</option>
+        <option value = "Surgical">Surgical</option>
+        <option value = "Medical">Medical</option>
+        <option value = "Paediatrics">Paediatrics</option>
+        <option value = "Orthopaedics">Orthopaedics</option>
+        <option value = "A&E">A&E</option>
+        <option value = "O&G">O&G</option>
+    </select>
+    <br>
+    <input type = "submit" value="Update">
+</form>
+<!-- 
+{{if .}}
+    
+    <h2>Id : {{.}}</h2>
+    
+{{end}} -->
+</body>
+</html>

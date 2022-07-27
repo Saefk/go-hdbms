@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>
+    Register Patient
+</h1>
+<form action ="/patient/register" method ="POST">
+    <label for ="patient">Patient First Name :</label><br>
+    <input type = "text" id ="firstNameID" name="firstName" value=""><br>
+    <label for ="patient">Patient Last Name :</label><br>
+    <input type = "text" id ="lastNameID" name="lastName" value=""><br>
+    <label for ="patient">Ward :</label><br>
+    <select name ="wardName" id="WardID" >
+        <option value = "Surgical">None</option>
+        <option value = "Surgical">Surgical</option>
+        <option value = "Medical">Medical</option>
+        <option value = "Paediatrics">Paediatrics</option>
+        <option value = "Orthopaedics">Orthopaedics</option>
+        <option value = "A&E">A&E</option>
+        <option value = "O&G">O&G</option>
+    </select>
+    <br>
+    <input type = "submit" value="Register">
+</form>
+
+{{if .}}
+    
+    <h2>Id : {{.}}</h2>
+    
+{{end}}
+</body>
+</html>

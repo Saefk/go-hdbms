@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>
+    Search by Patient
+</h1>
+<!-- <form action ="/searchbyward" method ="POST">
+    <label for ="Ward">Ward Name :</label><br>
+    <input type = "text" id ="WardID" name="WardName" value="John"><br>
+    <input type = "submit" value="Search">
+</form> -->
+<form action="/patient/ward" method = "Post">
+<select name ="WardName" id="WardID" >
+    <option value = "Surgical">Surgical</option>
+    <option value = "Medical">Medical</option>
+    <option value = "Paediatrics">Paediatrics</option>
+    <option value = "Orthopaedics">Orthopaedics</option>
+    <option value = "A&E">A&E</option>
+    <option value = "O&G">O&G</option>
+</select>
+<input type = "submit" value="Search">
+</form>
+{{if .}}
+    <ul>
+        {{range .}}
+        <li>Id : {{.ID}}</li>
+        <li>First Name : {{.Firstname}}</li>
+        <li>Last Name : {{.Lastname}}</li>
+        <li>Ward Name : {{.Ward}}</li>
+        <br>
+        <a href = "/patient/remove/?patientId={{.ID}}">Delete</a>
+        <a href = "/patient/update/redirect/?patientId={{.ID}}">Edit</a>
+        <br>
+        {{end}}
+    </ul>
+{{end}}
+</body>
+</html>
