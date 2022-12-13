@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>
+    Add Case
+</h1>
+<form action ="/case/new" method ="POST">
+    <!-- maybe get id from here -->
+    <label for ="patient">Patient First Name :</label><br>
+    <input type = "text" id ="firstNameID" name="firstName" value=""><br>
+    
+    <label for ="patient">Patient Last Name :</label><br>
+    <input type = "text" id ="lastNameID" name="lastName" value=""><br>
+    
+
+    <label for  = "registration date">Registration Date: </label><br>
+    <input type = "text" id = "registrationDateID" name = "registrationDate" value=""><br>
+    
+    <label for  = "triageID">Triage ID: </label><br>
+    <input type = "text" id = "triageID" name = "triageID" value=""><br>
+    
+    <label for  = "presentingComplaint">Presenting Complaint: </label><br>
+    <textarea type = "text" id = "presentingComplaintID" name = "presentingComplaint" value=""><br>
+    
+    <label for  = "History">History: </label><br>
+    <textarea type = "text" id = "HistoryID" name = "History" value=""><br>
+    
+    <label for  = "PMHistory">Past Medical History: </label><br>
+    <textarea type = "text" id = "PMHistoryID" name = "PMHistory" value=""><br>
+
+    <label for  = "DHistory">Drug History: </label><br>
+    <textarea type = "text" id = "DHistoryID" name = "DHistory" value=""><br>
+
+    <label for  = "Allergy">Allergies: </label><br>
+    <textarea type = "text" id = "AllergyID" name = "Allergy" value=""><br>  
+    
+    <label for  = "Examination">Examination: </label><br>
+    <textarea type = "text" id = "ExaminationID" name = "Examination" value=""><br>  
+    
+    <label for  = "Investigation">Investigation: </label><br>
+    <textarea type = "text" id = "InvestigationID" name = "Investigation" value=""><br>  
+    
+    <label for  = "Diagnosis">Diagnosis: </label><br>
+    <textarea type = "text" id = "DiagnosisID" name = "Diagnosis" value=""><br>  
+    
+    <label for  = "DischargeDate">DischargeDate: </label><br>
+    <input type = "text" id = "DischargeDateID" name = "DischargeDate" value=""><br>  
+    
+    <label for ="Ward">Ward :</label><br>
+    <select name ="wardName" id="WardID" >
+        <option value = "Surgical">None</option>
+        <option value = "Surgical">Surgical</option>
+        <option value = "Medical">Medical</option>
+        <option value = "Paediatrics">Paediatrics</option>
+        <option value = "Orthopaedics">Orthopaedics</option>
+        <option value = "A&E">A&E</option>
+        <option value = "O&G">O&G</option>
+    </select>
+    <!-- Change this when we have a login -->
+    <label for  = "CreatedBy">CreatedBy: </label><br>
+    <input type = "text" id = "CreatedByID" name = "CreatedBy" value=""><br>  
+    
+    <br>
+    <input type = "submit" value="Add Case">
+</form>
+
+{{if .}}
+    
+    <h2>Id : {{.}}</h2>
+    
+{{end}}
+</body>
+</html>

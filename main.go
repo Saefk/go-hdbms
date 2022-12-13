@@ -18,6 +18,57 @@ type Patient struct {
 	Ward      string
 }
 
+type Doctor struct {
+	ID                 int
+	DateOfBirth        string
+	NationalID         string
+	RegistrationNumber string
+	Rank               string
+	Department         string
+	DirectReport       string
+	PhoneNumber        string
+	Email              string
+	Address            string
+}
+
+type Case struct {
+	ID                   int
+	PatientID            int
+	RegisterDate         string
+	TriageID             int
+	PresentingComplaint  string
+	History              string
+	PastMedicalHistory   string
+	DrugHistory          string
+	Allergies            string
+	Examination          string
+	Investigation        string
+	ProvisionalDiagnosis string
+	DischargeDate        string
+	CurrentWard          string
+	DateCreated          string
+	CreatedBy            int
+}
+
+type CaseNote struct {
+	ID                  int
+	CaseID              int
+	PatientID           int
+	DoctorID            int
+	DateCreated         string
+	LastEdited          string
+	Editors             string
+	CaseType            string
+	PresentingComplaint string
+	History             string
+	Examination         string
+	Investigation       string
+	PastMedicalHistory  string
+	DrugHistory         string
+	Diagnoses           string
+	CurrentManagement   string
+}
+
 var tpl *template.Template
 
 var db *sql.DB
@@ -27,6 +78,7 @@ const DBPASS = "#Okibgnina321"
 func main() {
 
 	var err error
+	// this will only parse templates that match the templates/*. patterhtml
 	tpl, err = template.ParseGlob("templates/*.html")
 	if err != nil {
 		fmt.Println("template err")
@@ -47,6 +99,8 @@ func main() {
 	http.HandleFunc("/patient/update/redirect/", updateRedirectHandler)
 	http.HandleFunc("/patient/update/details/", updatePatientDetailsHandler)
 	http.HandleFunc("/", homePageHandler)
+
+	http.HandleFunc("/case/new", caseAddHandler)
 	http.ListenAndServe("localhost:8080", nil)
 
 	// check if connected to DB
@@ -79,7 +133,7 @@ func updateRedirectHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/patient/name", Redir)
 		return
 	}
-	tpl.ExecuteTemplate(w, "patientupdate.html", p)
+	tpl.ExecuteTemplate(w, "patient/patientupdate.html", p)
 }
 
 func updatePatientDetailsHandler(w http.ResponseWriter, r *http.Request) {
@@ -108,17 +162,17 @@ func updatePatientDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil || rowsAff != 1 {
 		print(rowsAff)
 		fmt.Println(err)
-		tpl.ExecuteTemplate(w, "result.html", "Error when attempting to update details")
+		tpl.ExecuteTemplate(w, "patient/result.html", "Error when attempting to update details")
 		return
 	}
 
-	tpl.ExecuteTemplate(w, "result.html", "Patient details successfully updated.")
+	tpl.ExecuteTemplate(w, "patient/result.html", "Patient details successfully updated.")
 }
 
 func patientSearchByNameHandler(w http.ResponseWriter, r *http.Request) {
 	//if method is get => write template
 	if r.Method == "GET" {
-		tpl.ExecuteTemplate(w, "patient/name.html", nil)
+		tpl.ExecuteTemplate(w, "patinet/patientbyname.html", nil)
 		return
 	}
 	r.ParseForm()
@@ -144,7 +198,7 @@ func patientSearchByNameHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// err := row.Scan(&P.ID, &P.Firstname, &P.Lastname, &P.Ward)
 
-	tpl.ExecuteTemplate(w, "patient/name.html", patients)
+	tpl.ExecuteTemplate(w, "patient/patientbyname.html", patients)
 }
 
 func removePatientByIdHandler(w http.ResponseWriter, r *http.Request) {
@@ -166,14 +220,14 @@ func removePatientByIdHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println("err:", err)
-	tpl.ExecuteTemplate(w, "result.html", "Patient successfully deletetd from register.")
+	tpl.ExecuteTemplate(w, "patient/result.html", "Patient successfully deletetd from register.")
 
 }
 
 func patientSearchbyWardHandler(w http.ResponseWriter, r *http.Request) {
 	//if method is get => write template
 	if r.Method == "GET" {
-		tpl.ExecuteTemplate(w, "patientsearchbyward.html", nil)
+		tpl.ExecuteTemplate(w, "patient/patientsearchbyward.html", nil)
 		return
 	}
 	r.ParseForm()
@@ -197,12 +251,12 @@ func patientSearchbyWardHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		patients = append(patients, p)
 	}
-	tpl.ExecuteTemplate(w, "patientsearchbyward.html", patients)
+	tpl.ExecuteTemplate(w, "patient/patientsearchbyward.html", patients)
 }
 
 func patientRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		tpl.ExecuteTemplate(w, "patientregister.html", nil)
+		tpl.ExecuteTemplate(w, "patient/patientregister.html", nil)
 		return
 	}
 	firstname := r.FormValue("firstName")
@@ -212,7 +266,7 @@ func patientRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	if firstname == "" || lastname == "" {
 		fmt.Println("Error registering", err)
-		tpl.ExecuteTemplate(w, "patientregister.html", "Error registering.Please ensure first name and last name filled in.")
+		tpl.ExecuteTemplate(w, "patient/patientregister.html", "Error registering.Please ensure first name and last name filled in.")
 		return
 	}
 
@@ -227,7 +281,7 @@ func patientRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	//check for error + if theres more than 1 row affected
 	if err != nil || rowsAffec != 1 {
 		fmt.Println("Error inserting row: ", err)
-		tpl.ExecuteTemplate(w, "patientregister.html", "Error registering patient.Please check first and last name")
+		tpl.ExecuteTemplate(w, "patient/patientregister.html", "Error registering patient.Please check first and last name")
 		return
 	}
 
@@ -235,7 +289,11 @@ func patientRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	rowsAffected, _ := res.RowsAffected()
 	fmt.Println("ID of last row inserted: ", lastInserted)
 	fmt.Println("No. of rows affected: ", rowsAffected)
-	tpl.ExecuteTemplate(w, "patientregister.html", "Patient successfully registered.")
+	tpl.ExecuteTemplate(w, "patient/patientregister.html", "Patient successfully registered.")
+}
+
+func caseAddHandler(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func homePageHandler(w http.ResponseWriter, r *http.Request) {

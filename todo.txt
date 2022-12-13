@@ -1,0 +1,24 @@
+> To flesh  out schema
+
+
+1) Patients 
+- Case files
+- Investigations
+
+2) Staff
+-Staff Details + Accesses
+
+3) Ward
+-Ui for bed arrangements
+-Dr assingnment
+
+4) Lab
+
+5) Radio
+
+Frontend??
+Desktop App + mobile App
+
+Maybe web based?
+
+
